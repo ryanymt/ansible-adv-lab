@@ -1,0 +1,25 @@
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks: 
+   - name: repo
+     include_role: 
+       name: enable-repo
+
+   - name: haproxy
+     include_role: 
+       name: haproxy
+     when: inventory_hostname in groups['frontends']
+     tags: 
+       - haproxy
+ 
+   - name: deploy tomcat
+     include_role:
+       name: deploy-tomcat
+     when: inventory_hostname in groups['apps']
+
+   - name: deploy postgres
+     include_role: 
+        name: deploy-postgres
+     when: inventory_hostname in groups['apps']

@@ -1,0 +1,8 @@
+---
+# tasks file for start-service
+- name: start services
+  service:
+    name: "{{item}}"
+    state: "{{srv_state | default('started')}}"
+  with_items: 
+    - "{{srv_name}}"

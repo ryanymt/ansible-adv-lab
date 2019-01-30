@@ -1,0 +1,11 @@
+---
+# tasks file for start-service
+- name: start services
+  include_tasks: start-services.yml
+
+- name: enable services
+  service:
+    name: "{{item}}"
+    enabled: yes
+  with_items:
+    - "{{srv_name}}"

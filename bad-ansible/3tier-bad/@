@@ -1,0 +1,7 @@
+- name: local host
+  hosts: localhost
+  gather_facts: false
+  become: true
+
+  tasks: 
+   - include_role: enable-rep

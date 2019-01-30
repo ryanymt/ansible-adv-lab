@@ -1,0 +1,39 @@
+---
+# tasks file for deploy-tomcat
+- name: install tomcat
+  include_role: 
+    name: install-package
+  vars:
+    pckg_name: tomcat
+
+- name: create ansible webroot directory
+  file:
+    path: /usr/share/tomcat/webapps/ROOT
+    state: directory
+
+- name: copy static index.html to tomcat webapps/ansible/index.html
+  template:
+     src: index.html.j2
+     dest: /usr/share/tomcat/webapps/ROOT/index.html
+     mode: 0644
+
+- name: enable tomcat
+  include_role: 
+    name: start-service
+  vars:
+    srv_name: tomcat
+
+- name: create ansible tomcat index directory
+  file:
+    path: /usr/share/tomcat/webapps/ansible
+    state: directory
+
+- name: index.html on app
+  template:
+    src: index.html.app.j2
+    dest: /usr/share/tomcat/webapps/ansible/index.html
+  notify: 
+   - restart tomcat
+
+
+

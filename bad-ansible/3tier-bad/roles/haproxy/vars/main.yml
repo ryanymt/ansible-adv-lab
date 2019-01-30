@@ -1,0 +1,8 @@
+---
+# vars file for haproxy
+pckg_name:
+  - httpd
+  - haproxy
+srv_name:
+  - httpd
+  - haproxy
