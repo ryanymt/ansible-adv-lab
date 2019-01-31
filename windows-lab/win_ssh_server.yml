@@ -1,0 +1,10 @@
+- hosts: windows
+  
+  tasks:
+    - name: include vars
+      include_vars:
+        file: ./ssh_var.yml
+
+    - name: win_service_config role
+      include_role: 
+        name: win_service_config

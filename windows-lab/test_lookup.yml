@@ -1,0 +1,17 @@
+- hosts: localhost
+  vars:
+    - user_info:
+        james:
+           firstname: James
+           email: james@example.com
+        bill:
+           firstname: bill
+           email: bill@example.com
+  tasks:
+   - name: test lookup 
+     shell: 
+      cmd: echo "{{item.key}} first name is {{item.value.firstname}} ... and .. email is {{item.value.email}}"
+     loop: "{{ lookup('dict' , user_info )}}"
+     register: result
+
+   - debug: var=result.stdout

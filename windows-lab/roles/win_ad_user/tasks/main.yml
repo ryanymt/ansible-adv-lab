@@ -1,0 +1,17 @@
+---
+# tasks file for win_domain_user
+#- name: create groups
+#  win_domain_group:
+#    name: "{{item.[].group_name}}"
+#    scope: "{{item.[].group_scope}}"
+#  with_items: 
+#    - "{{groups}}"
+#
+- name: Create AD users
+  win_domain_user:
+    name: "{{item.key}}"
+    surname: "{{item.value.lastname}}"
+    password: "{{item.value.password}}"
+    email: "{{item.value.email}}"
+    group: "{{item.value.group_name}}"
+  loop: "{{ lookup('dict' , user_info, wantlist=True)}}"

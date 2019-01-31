@@ -1,0 +1,34 @@
+---
+# vars file for win_domain_user
+group:
+   group1:
+     group_name: dev
+     group_scope: domainlocal
+   group2:
+     group_name: qa
+     group_scope: domainlocal
+user_info:
+   james:
+      firstname: James
+      lastname: Jockey
+      password: "redhat@123"
+      email: james@ad1.2f55.example.opentlc.com
+      group_name: "{{group.group1.group_name}}"
+   bill:
+      firstname: Bill
+      lastname: Gates
+      password: "redhat@123"
+      email: bill@ad1.2f55.example.opentlc.com
+      group_name: "{{group.group1.group_name}}"
+   mickey:
+      firstname: Mickey
+      lastname: Mouse
+      password: "redhat@123"
+      email: mickey@ad1.2f55.example.opentlc.com
+      group_name: "{{group.group2.group_name}}"
+   donald:
+      firstname: Donald
+      lastname: Duck
+      password: "redhat@123"
+      email: donald@ad1.2f55.example.opentlc.com
+      group_name: "{{group.group2.group_name}}"

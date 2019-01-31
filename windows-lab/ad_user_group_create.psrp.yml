@@ -1,0 +1,6 @@
+- hosts: windows
+  connection: psrp
+  tasks:
+    - name: create users and groups
+      include_role: 
+        name: win_ad_user
