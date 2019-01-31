@@ -1,0 +1,4 @@
+---
+# defaults file for enable-repo
+repo_src: "files/open_three-tier-app.repo"
+repo_dest: "/etc/yum.repos.d/open_three-tier-app.repo"

@@ -1,0 +1,26 @@
+---
+# tasks file for deploy-postgres
+- name: install postgres
+  include_role: 
+    name: install-package
+  vars: 
+    - pckg_name: 
+       - httpd
+       - postgresql-server
+
+- name: check postgres sql datadir
+  stat: 
+    path: /var/lib/pgsql/data/PG_VERSION
+  register: stat_result
+
+- name: initilize postgres
+  shell: postgresql-setup initdb
+  when: stat_result.stat.exists == False
+
+- name: enable services
+  include_role: 
+    name: start-service
+  vars: 
+   - srv_name: 
+       - httpd
+       - postgresql

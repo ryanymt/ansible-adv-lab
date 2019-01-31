@@ -1,0 +1,62 @@
+---
+#tasks file for deploy-instances
+
+- name: deploy or decomm  instance
+  os_server:
+    cloud: "{{user_name}}"
+    name: "{{item.instance_name}}"
+    image: "{{item.image_name}}"
+    flavor: "{{item.flavor_name}}"
+    key_name: "{{item.key_name}}"
+    network: "{{item.network_name}}"
+    auto_ip: "{{item.pub_ip | default ('no')}}"
+    state: "{{state}}"
+    security_groups: "{{item.security_groups}}"
+    meta: 
+     hostname: "{{item.instance_name}}"
+     group: "{{item.group_name | default (omit)}}"
+     deployment_name: "{{item.deployment_name | default (omit)}}"
+  with_items: 
+     - "{{instance_info}}"
+  register: serverinfo
+
+- name: assign floating IP
+  os_floating_ip:
+    cloud: "{{user_name}}"
+    network: "{{item.ext_network}}"
+    server: "{{item.instance_name}}"
+  with_items:
+     - "{{instance_info}}"
+  tags:
+    - fip
+
+- name: gather facts
+  os_server_facts:
+    cloud: "{{user_name}}"
+    server: "{{item.instance_name}}"
+  with_items: "{{ instance_info}}"
+  tags:
+    - imp
+
+  register: os_instance  
+#  tags: 
+#    - tag1
+
+- name: temp debug for tshoot
+  debug:
+     var: item.ansible_facts.openstack_servers[0].name
+  with_items: "{{lookup('list', os_instance.results)}}"
+  when: state == "present"  
+  tags:
+    - tag1
+
+- name: add temp host inventory
+  add_host:
+     name: "{{item.ansible_facts.openstack_servers[0].name}}"
+     groups: "{{item.ansible_facts.openstack_servers[0].metadata.group}}"
+     ansible_ssh_host: "{{item.ansible_facts.openstack_servers[0].public_v4 if item.ansible_facts.openstack_servers[0].public_v4 is defined else item.ansible_facts.openstack_servers[0].private_v4}}"
+  with_items: "{{lookup('list', os_instance.results)}}"
+  when: state == "present"
+  tags:
+   - skiptag
+   - imp

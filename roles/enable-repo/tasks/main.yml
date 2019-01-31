@@ -1,0 +1,9 @@
+---
+# tasks file for enable-repo
+- name: copy repo file into server
+  copy:
+    src: '{{item.0}}'
+    dest: '{{item.1}}'
+  with_together:
+    - '{{repo_src}}'
+    - '{{repo_dest}}'

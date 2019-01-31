@@ -1,0 +1,21 @@
+---
+# tasks file for haproxy
+- name: install packages
+  include_role: 
+    name: install-package
+
+#- name: start services
+#  include_role:
+#    name: start-service
+
+- name: copy haproxy config
+  template: 
+    src: haproxy.cfg.j2 
+    dest: /etc/haproxy/haproxy.cfg
+
+- name: restart ha proxy
+  include_role: 
+    name: start-service
+  vars:
+    srv_name: haproxy
+    srv_state: restarted

@@ -1,0 +1,8 @@
+---
+# tasks file for install-package
+- name: install package
+  yum: 
+    name: "{{item}}"
+    state: "{{pckg_state | default ('latest') }}"
+  with_items: 
+    - "{{pckg_name}}"
